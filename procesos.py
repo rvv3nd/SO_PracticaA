@@ -19,20 +19,26 @@ if __name__ == '__main__':
         try:
             opcion = int(input('Ingrese opción deseada: '))
         except ValueError as identifier:
-            opcion = 0
-        if opcion == 1:
-            id = input('\nIngresa identificador del proceso: ')
-            size = int(input('\nIngresa el tamaño del proceso: '))
-            proceso = Proceso(id,size)
-            procesos.append(proceso)
-            actualSize += size
-        elif opcion == 2:
-            pass
-        elif opcion == 3:
-            pass
-        elif opcion == 4:
-            break
-        else:
             print("Opción no válida\n")
+        else:
+            if opcion == 1:
+                id = input('\nIngresa identificador del proceso: ')
+                try: 
+                    size = int(input('\nIngresa el tamaño del proceso: '))
+                except ValueError as identifier:
+                    print("Tamaño no válido\nCreación de proceso abortada\n")
+                else:
+                    proceso = Proceso(id,size)
+                    procesos.append(proceso)
+                    actualSize += size
+            elif opcion == 2:
+                int(input('Ingresa el ID del proceso a borrar'))
+                
+            elif opcion == 3:
+                pass
+            elif opcion == 4:
+                break
+            else:
+                print("Opción no válida\n")
 
 
