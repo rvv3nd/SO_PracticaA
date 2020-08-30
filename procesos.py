@@ -32,8 +32,7 @@ if __name__ == '__main__':
                     procesos.append(proceso)
                     actualSize += size
             elif opcion == 2:
-                int(input('Ingresa el ID del proceso a borrar'))
-                
+                toDelet = int(input('Ingresa el ID del proceso a borrar'))
             elif opcion == 3:
                 pass
             elif opcion == 4:
