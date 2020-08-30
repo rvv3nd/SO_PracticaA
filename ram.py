@@ -95,11 +95,15 @@ def agregar(tamaño,procesos):
             break
     while True:
         print("Ingresa el tamaño del proceso: ", end="")
-        size = int(input())
-        if size <= 0:
+        try: 
+            size = int(input())
+        except:
             print("\tTamaño invalido")
-        else:
-            break
+        else:   
+            if size <= 0:
+                print("\tTamaño invalido")
+            else:
+                break
     if tamaño+size > 80:
         while True:
             print("\tMemoria RAM saturada")
