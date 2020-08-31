@@ -1,3 +1,4 @@
+MAX_SIZE = 80
 class Proceso:
     def __init__(self, id, size):
         self.id = id
@@ -65,7 +66,7 @@ def mapaBits(procesos):
             for j in range(procesos[i].size):
                 mapa.append(1)
                 suma += 1
-    for i in range(suma,80,1):
+    for i in range(suma,MAX_SIZE,1):
         mapa.append(0)
     for i in range(len(mapa)):
         if i%10 == 0:
@@ -74,7 +75,7 @@ def mapaBits(procesos):
     print("\n")
 
 def agregar(tamaño,procesos):
-    if tamaño == 80:
+    if tamaño == MAX_SIZE:
         return tamaño
     while True:
         print("Ingresa identificador del proceso: ", end="")
@@ -104,7 +105,7 @@ def agregar(tamaño,procesos):
                 print("\tTamaño invalido")
             else:
                 break
-    if tamaño+size > 80:
+    if tamaño+size > MAX_SIZE:
         while True:
             print("\tMemoria RAM saturada")
             print("\t1.-Eliminar ultimo proceso (FIFO)")
@@ -138,9 +139,65 @@ def agregar(tamaño,procesos):
     tamaño += size
     return tamaño
 
+def borrarProceso(id_to_delet, procesos):
+    for proceso in procesos:
+        if proceso.id == id_to_delet:
+            proceso.id = '@'
+            return proceso.size
+    return 0
+
+def fromRAMtoHDD(id_to_move,hdd,procesos):
+    for proceso in procesos:
+        if proceso.id == id_to_move:
+            hdd.append(Proceso(id_to_move,proceso.size))
+            proceso.id = '@'
+            return proceso.size
+    return 0
+
+def fromHDDtoRAM(id_to_move,hdd,procesos,actual):
+    for proceso in hdd:
+        if proceso.id == id_to_move:
+            if proceso.size + actual < 80:
+                procesos.append(proceso)
+                hdd.remove(proceso)
+                return proceso.size
+            else:
+                print("No hay espacio disponible en RAM")
+                return 0
+    return 0
+
+def changeSize(procesos,id,actual):
+    for i in range(len(procesos)):
+        if procesos[i].id == id:
+            value = int(input('Ingresa el valor de incremento o decremento: '))
+            if value > 0:
+                try:
+                    if procesos[i+1].id == '@':
+                        if actual + value < MAX_SIZE:      
+                            procesos[i+1].size -= value
+                            procesos[i].size += value
+                    else:
+                        print("Este proceso no puede crecer")
+                except IndexError as noMoreElements:
+                    if actual + value < MAX_SIZE:
+                        procesos[i].size += value
+                return value         
+            elif value < 0:
+                if procesos[i].size > -1*value:
+                    procesos[i].size += value
+                    return 0
+                else:
+                    print("Este proceso no pude decrecer tanto")
+            else:
+                print('Valor inválido')
+    return 0           
+def show(procesos):
+    for i in procesos:
+        print(i)
+
 if __name__ == '__main__':
     procesos = []
-    MAX_SIZE = 80
+    hdd = []
     actualSize = 0
     lista = ListaLibre()
     while True:
@@ -149,8 +206,9 @@ if __name__ == '__main__':
         print("2.-Eliminar proceso")
         print("3.-Visualizar RAM")
         print("4.-Representacion RAM")
-        print("5.-Intercambio de RAM");
-        print("6.-Salir", end =" ")
+        print("5.-Intercambio de RAM")
+        print("6.-Cambiar tamaño de proceso")
+        print("7.-Salir", end =" ")
         try:
             opcion = int(input())
         except ValueError as identifier:
@@ -159,10 +217,19 @@ if __name__ == '__main__':
             if opcion == 1:
                 actualSize = agregar(actualSize,procesos)
             elif opcion == 2:
-                pass
-            elif opcion == 3:
-                for i in procesos:
-                    print(i)
+                try:
+                    id_to_delet = input('Ingresa id a borrar')
+                except ValueError as identifier:
+                    print("id invalida")
+                else:
+                    t = borrarProceso(id_to_delet, procesos)
+                    if t > 0 : 
+                        print(f"proceso {id_to_delet} eliminado\n")
+                        actualSize -= t
+                    else:
+                        print(f"No se encontró proceso {id_to_delet}\n")
+            elif opcion == 3:   
+                show(procesos)
             elif opcion == 4:
                 print("\t1.-Mapa de bits")
                 print("\t2.-Listas Libres",end=" ")
@@ -173,8 +240,43 @@ if __name__ == '__main__':
                     lista.generarLista(procesos)
                     lista.mostrar()
             elif opcion == 5:
-                pass
-            elif opcion == 6:
+                print("\t1.-Pasar proceso de RAM a HDD")
+                print("\t2.-Pasar proceso de HDD a RAM")
+                try:
+                    opc =  int(input('Opcion deseada: '))
+                except ValueError as e:
+                    print("Opcion invalida")
+                else:
+                    if opc == 1:
+                        if len(procesos) == 0 :
+                            print("Memoria RAM sin procesos")
+                        else:
+                            show(procesos)
+                            id_to_move = input('Ingresa el ID del proceso a mover a HDD: ')
+                            t = fromRAMtoHDD(id_to_move,hdd,procesos)
+                            if t > 0:
+                                actualSize -= t
+                                print("Proceso movido")
+                            else: 
+                                print("No se pudo mover el proceso")
+                    elif opc ==2:
+                        if len(hdd) == 0:
+                            print("El Disco esta vacio. Intente agregar un proceso desde RAM")
+                        else:
+                            show(hdd)
+                            id_to_move = input('Ingresa el ID del proceso a mover a RAM: ')
+                            t = fromHDDtoRAM(id_to_move,hdd,procesos,actualSize)
+                            if t > 0:
+                                actualSize += t
+                                print("Proceso movido")
+                            else:
+                                print("No se pudo mover el proceso")
+                    else:
+                        print("Opcion invalida")
+            elif opcion ==6:
+                id_to_change = input("Ingresa el ID del proceso: ")
+                actualSize += changeSize(procesos,id_to_change,actualSize)
+            elif opcion == 7:
                 print("\tGracias por usar este programa\n")
                 break
             else:
