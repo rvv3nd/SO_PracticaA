@@ -255,7 +255,6 @@ if __name__ == '__main__':
                             id_to_move = input('Ingresa el ID del proceso a mover a HDD: ')
                             t = fromRAMtoHDD(id_to_move,hdd,procesos)
                             if t > 0:
-                                actualSize -= t
                                 print("Proceso movido")
                             else: 
                                 print("No se pudo mover el proceso")
