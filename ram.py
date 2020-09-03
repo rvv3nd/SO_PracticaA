@@ -127,17 +127,18 @@ def agregarElemntos(procesos,tamaño):
         if not agregar2(procesos,id,size,tamaño):
             print("\tMemoria RAM saturada")
             show(procesos,tamaño)
-            if contador == 2:
+            if contador == 3:
                 return tamaño
             print("\t1.-Eliminar ultimo proceso (FIFO)")
             print("\t2.-No insertar proceso",end=" ")
             opcion = int(input())
             if opcion == 1:
-                tamaño = eliminarUltimo(procesos,tamaño,id,size)
+                tamaño -= borrarProceso(procesos[len(procesos)-1].id,procesos)
             elif opcion == 2:
                 return tamaño
             else:
                 print("\tOpcion no valida, de otra")
+            contador +=1
         else:
             break
     return tamaño + size
@@ -168,11 +169,6 @@ def agregar2(procesos,id,size,tamaño):
         procesos.append(Proceso(id,size))
         bandera = True
     return bandera
-
-def eliminarUltimo(procesos,tamaño,id,size):
-    tamaño -= procesos[len(procesos)-1].size
-    procesos.pop()
-    return tamaño
 
 def borrarProceso(id_to_delet, procesos):
     for i in range(len(procesos)):
