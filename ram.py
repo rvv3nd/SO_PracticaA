@@ -181,15 +181,18 @@ def borrarProceso(id_to_delet, procesos):
             tam = procesos[i].size
             try:
                 if i+1 == len(procesos):
-                    procesos.pop(i)
-                elif procesos[i+1].id == '@':
+                    if procesos[i-1].id == '@':
+                        procesos.pop(i)
+                        procesos.pop(i-1)
+                    else:
+                        procesos.pop(i)
+                if procesos[i+1].id == '@':
                     procesos[i].size += procesos[i+1].size
                     procesos.pop(i+1)
-                elif procesos[i-1].id == '@':
+                if procesos[i-1].id == '@':
                     procesos[i].size += procesos[i-1].size
                     procesos.pop(i-1)
             except IndexError as noMoreElements:
-                print("exception")
                 return tam
             return tam
     return 0
@@ -259,7 +262,7 @@ def changeSize(procesos,id,actual):
                             procesos[i+1].size += -value
                             procesos[i].size += value
                         elif procesos[i-1].id == '@':
-                            procesos[i+1].size += -value
+                            procesos[i-1].size += -value
                             procesos[i].size += value
                         else:
                             procesos[i].size += value
