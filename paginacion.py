@@ -11,6 +11,17 @@ def existe(name,procesos):
         if name == proceso.id: return proceso
     return None
 
+def listaLibre(procesos):
+    cad = ''
+    for proceso in procesos:
+        if proceso.id != 0:
+            cad += f' | P | {proceso.size} | -> '
+        else:
+            cad += f' | H | {proceso.size} | -> ' 
+    print (cad+'end')
+
+
+
 if __name__ == "__main__":
     
     MAX = int(input('Max de memoria: '))
@@ -18,7 +29,6 @@ if __name__ == "__main__":
 
     size_per_page = int(MAX * (porcion/100))
     actual_size = 0
-
     procesos = []
     libro = []
     pagina = []
@@ -26,8 +36,9 @@ if __name__ == "__main__":
     while True:
         print('1.-Insertar proceso')
         print('2.-Ver paginas')
-        print('3.-Eliminar proceso')
-        print('4.-Salir')
+        print('3.-Ver en listas libres')
+        print('4.-Eliminar proceso')
+        print('5.-Salir')
         try:
             opc = int(input("Opción deseada: "))
         except Exception as e:
@@ -60,13 +71,15 @@ if __name__ == "__main__":
                 print(f'Hoja {num_hoja}')
                 print(pagina)
             elif opc == 3:
+                listaLibre(procesos)
+            elif opc == 4:
                 name = input('ID del proceso a borrar: ')
                 proceso = existe(name,procesos)
                 if not proceso == None:
                     proceso.id = 0
                 else:
                     print('No existe tal proceso')
-            elif opc == 4:
+            elif opc == 5:
                 break
             else:
                 print('Opción no válida')
