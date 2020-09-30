@@ -17,7 +17,6 @@ def show(procesos,actual):
         if actual != MAX_SIZE:
             print("\tDisponible",MAX_SIZE - actual)
 
-<<<<<<< HEAD
 def agregarElemntos(procesos,tamaño):
     contador = 0
     while True:
@@ -118,40 +117,13 @@ if __name__ == '__main__':
     MAX_SIZE = int(input('Max de memoria: '))
     porcion = int(input("Porcentaje para cada página: "))
     size_per_page = int(MAX_SIZE * (porcion/100))
-=======
-def listaLibre(procesos):
-    cad = ''
-    for proceso in procesos:
-        if proceso.id != 0:
-            cad += f' | P | {proceso.size} | -> '
-        else:
-            cad += f' | H | {proceso.size} | -> ' 
-    print (cad+'end')
-
-
-
-if __name__ == "__main__":
-    
-    MAX = int(input('Max de memoria: '))
-    porcion = int(input("Porcentaje para cada página: "))
-
-    size_per_page = int(MAX * (porcion/100))
-    actual_size = 0
->>>>>>> 9fbd85778e00eae31a8d74ec0607a28980ab12e2
     procesos = []
     actualSize = 0
     while True:
         print('1.-Insertar proceso')
-<<<<<<< HEAD
         print('2.-Eliminar proceso')
         print('3.-Ver Ram')
         print('4.-Salir')
-=======
-        print('2.-Ver paginas')
-        print('3.-Ver en listas libres')
-        print('4.-Eliminar proceso')
-        print('5.-Salir')
->>>>>>> 9fbd85778e00eae31a8d74ec0607a28980ab12e2
         try:
             opc = int(input())
         except ValueError as identifier:
@@ -172,7 +144,6 @@ if __name__ == "__main__":
                     else:
                         print(f"No se encontró proceso {id_to_delet}")
             elif opc == 3:
-<<<<<<< HEAD
                 if len(procesos) == 0:
                     print("Memoria vacia")
                     continue
@@ -202,17 +173,6 @@ if __name__ == "__main__":
                 print()
             elif opc == 4:
                 print("Gracias por usar este programa")
-=======
-                listaLibre(procesos)
-            elif opc == 4:
-                name = input('ID del proceso a borrar: ')
-                proceso = existe(name,procesos)
-                if not proceso == None:
-                    proceso.id = 0
-                else:
-                    print('No existe tal proceso')
-            elif opc == 5:
->>>>>>> 9fbd85778e00eae31a8d74ec0607a28980ab12e2
                 break
             else:
                 print('Opción no válida')
